@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Deepfake Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 AI Deepfake Detector</h1>
+    <p>Analyze Text, Image & Video with AI</p>
+
+    <hr>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <div class="input-box">
+            <label>✍️ Enter Text</label>
+            <textarea name="text" placeholder="Enter text here..."></textarea>
+        </div>
+
+        <div class="input-box">
+            <label>🖼 Upload Image</label>
+            <input type="file" name="image">
+        </div>
+
+        <div class="input-box">
+            <label>🎥 Upload Video</label>
+            <input type="file" name="video">
+        </div>
+
+        <button type="submit">🚀 Analyze</button>
+
+    </form>
+
+    <!-- STATUS -->
+    {% if status %}
+        <div class="status">{{ status }}</div>
+    {% endif %}
+
+    <!-- RESULT -->
+    {% if result %}
+        <div class="result">Result: {{ result }}</div>
+    {% endif %}
+
+    <p class="footer">
+        © 2026 AI Detection System | Developed by You
+    </p>
+
+</div>
+
+</body>
+</html>
