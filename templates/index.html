@@ -2,7 +2,12 @@
 <html>
 <head>
     <title>AI Deepfake Detector</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -10,46 +15,39 @@
 <div class="container">
 
     <h1>🚀 AI Deepfake Detector</h1>
-    <p>Analyze Text, Image & Video with AI</p>
+    <p>Analyze Text, Image & Video</p>
 
-    <hr>
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
 
-    <form method="POST" enctype="multipart/form-data">
+        <textarea name="text" placeholder="✍️ Enter text here..."></textarea>
 
-        <div class="input-box">
-            <label>✍️ Enter Text</label>
-            <textarea name="text" placeholder="Enter text here..."></textarea>
-        </div>
+        <label>🖼 Upload Image</label>
+        <input type="file" name="image">
 
-        <div class="input-box">
-            <label>🖼 Upload Image</label>
-            <input type="file" name="image">
-        </div>
+        <label>🎥 Upload Video</label>
+        <input type="file" name="video">
 
-        <div class="input-box">
-            <label>🎥 Upload Video</label>
-            <input type="file" name="video">
-        </div>
-
-        <button type="submit">🚀 Analyze</button>
+        <button type="submit">Analyze</button>
 
     </form>
 
-    <!-- STATUS -->
-    {% if status %}
-        <div class="status">{{ status }}</div>
-    {% endif %}
+    <!-- Loader -->
+    <div id="loader">⏳ Processing...</div>
 
-    <!-- RESULT -->
+    <!-- Result -->
     {% if result %}
-        <div class="result">Result: {{ result }}</div>
+        <div class="result">
+            {{ result }}
+        </div>
     {% endif %}
-
-    <p class="footer">
-        © 2026 AI Detection System | Developed by You
-    </p>
 
 </div>
+
+<script>
+function showLoader() {
+    document.getElementById("loader").style.display = "block";
+}
+</script>
 
 </body>
 </html>
