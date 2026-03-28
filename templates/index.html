@@ -1,53 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Deepfake Detector</title>
-
+    <title>AI Detector</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>🚀 AI Deepfake Detector</h1>
-    <p>Analyze Text, Image & Video</p>
+    <h1>🚀 AI Detector</h1>
 
-    <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+    <form method="POST" enctype="multipart/form-data">
 
-        <textarea name="text" placeholder="✍️ Enter text here..."></textarea>
+        <textarea name="text" placeholder="Enter text"></textarea>
 
-        <label>🖼 Upload Image</label>
         <input type="file" name="image">
-
-        <label>🎥 Upload Video</label>
         <input type="file" name="video">
 
         <button type="submit">Analyze</button>
 
     </form>
 
-    <!-- Loader -->
-    <div id="loader">⏳ Processing...</div>
+    {% if text_result %}
+        <div class="result">📝 {{ text_result }}</div>
+    {% endif %}
 
-    <!-- Result -->
-    {% if result %}
-        <div class="result">
-            {{ result }}
-        </div>
+    {% if image_result %}
+        <div class="result">🖼 {{ image_result }}</div>
+    {% endif %}
+
+    {% if video_result %}
+        <div class="result">🎥 {{ video_result }}</div>
     {% endif %}
 
 </div>
-
-<script>
-function showLoader() {
-    document.getElementById("loader").style.display = "block";
-}
-</script>
 
 </body>
 </html>

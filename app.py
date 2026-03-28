@@ -6,21 +6,23 @@ import pickle
 
 app = Flask(__name__)
 
-# Load ML model
+# Load model
 model, vectorizer = pickle.load(open("model/model.pkl", "rb"))
 
 # Upload folder
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# API keys
-API_USER = "616926002"
-API_SECRET = "DWVrJBW9KxWiLSvfFxZFV43YefBgyP6e"
+# API Keys (apni dalna)
+API_USER = "YOUR_API_USER"
+API_SECRET = "YOUR_API_SECRET"
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    result = None
+    text_result = None
+    image_result = None
+    video_result = None
 
     if request.method == "POST":
 
@@ -28,18 +30,14 @@ def home():
         image = request.files.get("image")
         video = request.files.get("video")
 
-        # ================= TEXT =================
+        # ========= TEXT =========
         if text and text.strip() != "":
             X = vectorizer.transform([text])
             prediction = model.predict(X)
+            text_result = "AI Generated Text" if prediction[0] == 1 else "Human Written Text"
 
-            if prediction[0] == 1:
-                result = "AI Generated Text"
-            else:
-                result = "Human Written Text"
-
-        # ================= IMAGE =================
-        elif image and image.filename != "":
+        # ========= IMAGE =========
+        if image and image.filename != "":
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], image.filename)
             image.save(filepath)
 
@@ -57,16 +55,12 @@ def home():
 
             try:
                 ai_score = result_data['type']['ai_generated']
-
-                if ai_score > 0.5:
-                    result = "AI Generated Image"
-                else:
-                    result = "Real Image"
+                image_result = "AI Generated Image" if ai_score > 0.5 else "Real Image"
             except:
-                result = "Error analyzing image"
+                image_result = "Error analyzing image"
 
-        # ================= VIDEO =================
-        elif video and video.filename != "":
+        # ========= VIDEO =========
+        if video and video.filename != "":
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], video.filename)
             video.save(filepath)
 
@@ -91,18 +85,16 @@ def home():
 
                 try:
                     ai_score = result_data['type']['ai_generated']
-
-                    if ai_score > 0.5:
-                        result = "AI Generated Video"
-                    else:
-                        result = "Real Video"
+                    video_result = "AI Generated Video" if ai_score > 0.5 else "Real Video"
                 except:
-                    result = "Error analyzing video"
-
+                    video_result = "Error analyzing video"
             else:
-                result = "Video processing error"
+                video_result = "Video processing error"
 
-    return render_template("index.html", result=result)
+    return render_template("index.html",
+                           text_result=text_result,
+                           image_result=image_result,
+                           video_result=video_result)
 
 
 if __name__ == "__main__":
