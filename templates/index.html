@@ -1,55 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Deepfake Detector</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>AI Detector</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            margin: 8px 0;
+        }
+
+        button {
+            background: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .text { background: #d4edda; }
+        .image { background: #cce5ff; }
+        .video { background: #f8d7da; }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
-
-    <h1>🚀 AI Deepfake Detector</h1>
-    <p>Analyze Text, Image & Video</p>
+<div class="box">
+    <h2>🚀 AI Detector</h2>
 
     <form method="POST" enctype="multipart/form-data">
 
-        <textarea name="text" placeholder="✍️ Enter text..."></textarea>
+        <!-- TEXT -->
+        <label>Enter Text:</label>
+        <textarea name="text"></textarea>
 
-        <label>🖼 Upload Image</label>
-        <input type="file" name="image">
+        <!-- IMAGE -->
+        <label>Upload Image:</label><br>
+        <input type="file" name="image"><br>
 
-        <label>🎥 Upload Video</label>
-        <input type="file" name="video">
+        <!-- VIDEO -->
+        <label>Upload Video:</label><br>
+        <input type="file" name="video"><br>
 
         <button type="submit">Analyze</button>
-
     </form>
 
-    <div class="results">
+    <!-- RESULTS -->
+    {% if text_result %}
+        <div class="result text">{{ text_result }}</div>
+    {% endif %}
 
-        {% if text_result %}
-        <div class="card text">
-            <h3>📝 Text Result</h3>
-            <p>{{ text_result }}</p>
-        </div>
-        {% endif %}
+    {% if image_result %}
+        <div class="result image">{{ image_result }}</div>
+    {% endif %}
 
-        {% if image_result %}
-        <div class="card image">
-            <h3>🖼 Image Result</h3>
-            <p>{{ image_result }}</p>
-        </div>
-        {% endif %}
-
-        {% if video_result %}
-        <div class="card video">
-            <h3>🎥 Video Result</h3>
-            <p>{{ video_result }}</p>
-        </div>
-        {% endif %}
-
-    </div>
+    {% if video_result %}
+        <div class="result video">{{ video_result }}</div>
+    {% endif %}
 
 </div>
 
