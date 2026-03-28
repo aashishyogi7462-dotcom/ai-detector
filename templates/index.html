@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Detector</title>
+    <title>AI Deepfake Detector</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -9,30 +9,47 @@
 
 <div class="container">
 
-    <h1>🚀 AI Detector</h1>
+    <h1>🚀 AI Deepfake Detector</h1>
+    <p>Analyze Text, Image & Video</p>
 
     <form method="POST" enctype="multipart/form-data">
 
-        <textarea name="text" placeholder="Enter text"></textarea>
+        <textarea name="text" placeholder="✍️ Enter text..."></textarea>
 
+        <label>🖼 Upload Image</label>
         <input type="file" name="image">
+
+        <label>🎥 Upload Video</label>
         <input type="file" name="video">
 
         <button type="submit">Analyze</button>
 
     </form>
 
-    {% if text_result %}
-        <div class="result">📝 {{ text_result }}</div>
-    {% endif %}
+    <div class="results">
 
-    {% if image_result %}
-        <div class="result">🖼 {{ image_result }}</div>
-    {% endif %}
+        {% if text_result %}
+        <div class="card text">
+            <h3>📝 Text Result</h3>
+            <p>{{ text_result }}</p>
+        </div>
+        {% endif %}
 
-    {% if video_result %}
-        <div class="result">🎥 {{ video_result }}</div>
-    {% endif %}
+        {% if image_result %}
+        <div class="card image">
+            <h3>🖼 Image Result</h3>
+            <p>{{ image_result }}</p>
+        </div>
+        {% endif %}
+
+        {% if video_result %}
+        <div class="card video">
+            <h3>🎥 Video Result</h3>
+            <p>{{ video_result }}</p>
+        </div>
+        {% endif %}
+
+    </div>
 
 </div>
 
