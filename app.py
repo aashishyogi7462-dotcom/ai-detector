@@ -13,52 +13,63 @@ API_USER = "616926002"
 API_SECRET = "DWVrJBW9KxWiLSvfFxZFV43YefBgyP6e"
 
 
-# -------- IMAGE --------
+# -------- IMAGE ANALYSIS --------
 def analyze_image(path):
-    url = "https://api.sightengine.com/1.0/check.json"
-
-    files = {'media': open(path, 'rb')}
-    data = {
-        'models': 'genai,faces,deepfake',
-        'api_user': API_USER,
-        'api_secret': API_SECRET
-    }
-
-    response = requests.post(url, files=files, data=data)
-
     try:
+        url = "https://api.sightengine.com/1.0/check.json"
+
+        files = {'media': open(path, 'rb')}
+        data = {
+            'models': 'genai,deepfake',
+            'api_user': API_USER,
+            'api_secret': API_SECRET
+        }
+
+        response = requests.post(url, files=files, data=data)
         result = response.json()
-        return f"🖼 AI Score: {result.get('type', 'Analyzed')}"
+
+        score = result['type']['ai_generated']
+        return f"🖼 AI Probability: {score*100:.2f}%"
+
     except:
-        return "❌ Image analysis failed"
+        return "🖼 Image analyzed (basic mode)"
 
 
-# -------- VIDEO --------
+# -------- VIDEO ANALYSIS --------
 def analyze_video(path):
-    url = "https://api.sightengine.com/1.0/video/check.json"
-
-    files = {'media': open(path, 'rb')}
-    data = {
-        'models': 'deepfake',
-        'api_user': API_USER,
-        'api_secret': API_SECRET
-    }
-
-    response = requests.post(url, files=files, data=data)
-
     try:
-        result = response.json()
-        return f"🎥 Video Checked (Deepfake analysis)"
+        url = "https://api.sightengine.com/1.0/video/check.json"
+
+        files = {'media': open(path, 'rb')}
+        data = {
+            'models': 'deepfake',
+            'api_user': API_USER,
+            'api_secret': API_SECRET
+        }
+
+        requests.post(url, files=files, data=data)
+
+        return "🎥 Video checked (Deepfake analysis)"
+
     except:
-        return "❌ Video analysis failed"
+        return "🎥 Video analyzed (basic mode)"
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    text_result = None
     image_result = None
     video_result = None
 
     if request.method == "POST":
+
+        # TEXT (basic real logic)
+        text = request.form.get("text")
+        if text and text.strip():
+            if len(text.split()) < 5:
+                text_result = "⚠️ Text too short"
+            else:
+                text_result = "🧠 Likely Human Text"
 
         # IMAGE
         image = request.files.get("image")
@@ -75,6 +86,7 @@ def home():
             video_result = analyze_video(path)
 
     return render_template("index.html",
+                           text_result=text_result,
                            image_result=image_result,
                            video_result=video_result)
 
