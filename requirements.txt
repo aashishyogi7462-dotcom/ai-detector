@@ -1,6 +1,6 @@
 flask
-requests
-opencv-python
-numpy
-scikit-learn
 gunicorn
+opencv-python-headless
+pillow
+transformers
+torch

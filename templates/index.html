@@ -224,7 +224,6 @@
 </head>
 
 <body>
-
 <div class="container">
     <div class="header">
         <h1>AI Detector</h1>
@@ -249,21 +248,37 @@
                     <textarea name="text" id="textInput" placeholder="Paste your text..."></textarea>
                 </div>
 
+                <!-- IMAGE -->
                 <div id="imageBox" class="input-box">
+                    
+                    <!-- 🔥 IMAGE PREVIEW -->
+                    <div style="display:flex; justify-content:center; margin-top:10px;">
+                        <img id="imagePreview" width="260" style="display:none;">
+                    </div>
+
                     <label class="file-box">
                         <span>Click to upload Image</span><br>
                         <span>Upto 10 MB</span>
                         <input type="file" name="image" id="imageInput" accept="image/*">
                     </label>
+
                     <div id="imageName" style="color:var(--accent); font-size:12px; margin-top:10px;"></div>
                 </div>
 
+                <!-- VIDEO -->
                 <div id="videoBox" class="input-box">
+                    
+                    <!-- 🔥 VIDEO PREVIEW -->
+                    <div style="display:flex; justify-content:center; margin-top:10px;">
+                        <video id="previewPlayer" width="260" controls style="display:none;"></video>
+                    </div>
+
                     <label class="file-box">
                         <span>Click to upload Video</span><br>
                         <span>Upto 50 MB</span>
                         <input type="file" name="video" id="videoInput" accept="video/*">
                     </label>
+
                     <div id="videoName" style="color:var(--accent); font-size:12px; margin-top:10px;"></div>
                 </div>
             </div>
@@ -272,11 +287,60 @@
         </form>
     </div>
 
+    <!-- RESULT -->
     {% if text_result %}<div class="result text">{{ text_result }}</div>{% endif %}
     {% if image_result %}<div class="result image">{{ image_result }}</div>{% endif %}
     {% if video_result %}<div class="result video">{{ video_result }}</div>{% endif %}
+
+    <!-- 🔥 BACKEND PREVIEW (AFTER ANALYZE) -->
+    {% if image_path %}
+    <div style="display:flex; justify-content:center; margin-top:15px;">
+        <img src="{{ image_path }}" width="260">
+    </div>
+    {% endif %}
+
+    {% if video_path %}
+    <div style="display:flex; justify-content:center; margin-top:15px;">
+        <video width="260" controls>
+            <source src="{{ video_path }}">
+        </video>
+    </div>
+    {% endif %}
+
 </div>
 
+<!-- 🔥 JS PREVIEW -->
+<script>
+// IMAGE preview
+document.getElementById("imageInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+
+        document.getElementById("previewPlayer").style.display = "none";
+
+        const img = document.getElementById("imagePreview");
+        img.src = url;
+        img.style.display = "block";
+    }
+});
+
+// VIDEO preview
+document.getElementById("videoInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+
+        document.getElementById("imagePreview").style.display = "none";
+
+        const video = document.getElementById("previewPlayer");
+        video.src = url;
+        video.style.display = "block";
+    }
+});
+</script>
+
+</body>
 <script>
 let current = "text";
 const form = document.getElementById("form");
@@ -319,6 +383,27 @@ videoInput.addEventListener("change", () => {
     validate();
 });
 </script>
+<script>
+// IMAGE preview
+document.getElementById("imageInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+        const img = document.getElementById("imagePreview");
+        img.src = url;
+        img.style.display = "block";
+    }
+});
 
-</body>
+// VIDEO preview
+document.getElementById("videoInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+        const video = document.getElementById("previewPlayer");
+        video.src = url;
+        video.style.display = "block";
+    }
+});
+</script></body>
 </html>
